@@ -27,7 +27,7 @@ namespace DataScience
     {
         public static T Read<T>(string filename)
         {
-            using (var file = File.Open(filename, FileMode.Open, FileAccess.Read))
+            using (var file = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
                 return (T)new BinaryFormatter().Deserialize(file);
         }
 
