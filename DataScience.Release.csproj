@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{953967E6-44F9-490C-B599-FBA529E09D50}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DataScience</RootNamespace>
+    <AssemblyName>DataScience</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\cribbers\packages\Newtonsoft.Json.9.0.2-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Averager.cs" />
+    <Compile Include="DataAccess\IDbConnectionExtensions.cs" />
+    <Compile Include="Dictionary.cs" />
+    <Compile Include="Files.cs" />
+    <Compile Include="GeneticAlgorithms\ArrayGene\ArrayChromosome.cs" />
+    <Compile Include="GeneticAlgorithms\ArrayGene\ArrayGene.cs" />
+    <Compile Include="GeneticAlgorithms\ArrayGene\Solutions.cs" />
+    <Compile Include="GeneticAlgorithms\ConsoleGUI\ConsoleGUI.cs" />
+    <Compile Include="GeneticAlgorithms\GenericAlgorithm\Chromosome.cs" />
+    <Compile Include="GeneticAlgorithms\GenericAlgorithm\GaHelper.cs" />
+    <Compile Include="GeneticAlgorithms\GenericAlgorithm\GAParameter.cs" />
+    <Compile Include="GeneticAlgorithms\GenericAlgorithm\Gene.cs" />
+    <Compile Include="GeneticAlgorithms\GenericAlgorithm\GeneticAlgorithm.cs" />
+    <Compile Include="GeneticAlgorithms\GenericAlgorithm\IGeneticAlgorithm.cs" />
+    <Compile Include="GeneticAlgorithms\GenericAlgorithm\RandomExtensions.cs" />
+    <Compile Include="GeneticAlgorithms\GenericAlgorithm\Solutions.cs" />
+    <Compile Include="Histogram.cs" />
+    <Compile Include="HSBtoRGB.cs" />
+    <Compile Include="Regression\GUI\AlgorithmProgram1.cs" />
+    <Compile Include="StringAlgorithms\CommonSubstringAlgorithmTests.cs" />
+    <Compile Include="StringAlgorithms\CommonSubtringAlgorithm.cs" />
+    <Compile Include="StringAlgorithms\IStringComparator.cs" />
+    <Compile Include="StringAlgorithms\Joiner.cs" />
+    <Compile Include="StringAlgorithms\LevensteinAlgorithmTest.cs" />
+    <Compile Include="StringAlgorithms\LeventeinAlgorithm.cs" />
+    <Compile Include="StringAlgorithms\Pairwise.cs" />
+    <Compile Include="Tables\SortedAutoCreate.cs" />
+    <Compile Include="Tables\SortedAutoCreate_Should.cs" />
+    <Compile Include="Tables\TableDimensionExtensions.cs" />
+    <Compile Include="DataAccess\TypeMapper.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Extensions\Plotting.cs" />
+    <Compile Include="HtmlReport.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuickAnalysis\Accessors\CombinedAccessor.cs" />
+    <Compile Include="QuickAnalysis\Accessors\FieldAccessor.cs" />
+    <Compile Include="QuickAnalysis\Accessors\IAccessor.cs" />
+    <Compile Include="QuickAnalysis\Accessors\PropertyAccessor.cs" />
+    <Compile Include="QuickAnalysis\Accessors\Types.cs" />
+    <Compile Include="QuickAnalysis\DataConsole.cs" />
+    <Compile Include="QuickAnalysis\DataConsoleBuffer.cs" />
+    <Compile Include="QuickAnalysis\Printing.cs" />
+    <Compile Include="Regression\Examples\BasicRegressionAlgorithm.cs" />
+    <Compile Include="Regression\Examples\Examples.cs" />
+    <Compile Include="Regression\GUI\Algorithm.cs" />
+    <Compile Include="Regression\GUI\AlgorithmProgram.cs" />
+    <Compile Include="Regression\Architecture\Indexer.cs" />
+    <Compile Include="Regression\Architecture\IVariableSizeNode.cs" />
+    <Compile Include="Regression\Architecture\ListDecorator.cs" />
+    <Compile Include="Regression\Architecture\Network.cs" />
+    <Compile Include="Regression\GUI\HistoryChart.cs" />
+    <Compile Include="Regression\NeuralNetworks\NeuralNetwork.cs" />
+    <Compile Include="Regression\Architecture\Node.cs" />
+    <Compile Include="Regression\Architecture\NodeData.cs" />
+    <Compile Include="Regression\Nodes\ApproxFunction.cs" />
+    <Compile Include="Regression\Nodes\Connector.cs" />
+    <Compile Include="Regression\Nodes\InputNode.cs" />
+    <Compile Include="Regression\NeuralNetworks\Neuron.cs" />
+    <Compile Include="Regression\Nodes\Parameter.cs" />
+    <Compile Include="Regression\Nodes\ProductNode.cs" />
+    <Compile Include="Regression\Nodes\SumNode.cs" />
+    <Compile Include="Regression\NeuralNetworks\Tanh.cs" />
+    <Compile Include="Regression\Nodes\Normalizator.cs" />
+    <Compile Include="Regression\Architecture\Teacher.cs" />
+    <Compile Include="Tables\AutoCreateIndexer.cs" />
+    <Compile Include="Tables\AutoCreateIndexer_Should.cs" />
+    <Compile Include="Tables\DimensionIndexer.cs" />
+    <Compile Include="Tables\DimensionIndexerFactory.cs" />
+    <Compile Include="Tables\IntIndexer.cs" />
+    <Compile Include="Tables\IntIndexer_Should.cs" />
+    <Compile Include="Tables\OnlyExistedIndexer.cs" />
+    <Compile Include="Tables\OnlyExistedIndexer_Should.cs" />
+    <Compile Include="Tables\SortedContinousIndexer.cs" />
+    <Compile Include="Tables\SortedContinousIndexer_Should.cs" />
+    <Compile Include="Tables\Table.ReadCsv.cs" />
+    <Compile Include="Tables\Table{TRow,TColumn,TValue}.cs" />
+    <Compile Include="Tables\TableDimension.cs" />
+    <Compile Include="Tables\TableIndexer.cs" />
+    <Compile Include="DataAccess\TypeMapper_should.cs" />
+    <Compile Include="Tables\Transliterator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
