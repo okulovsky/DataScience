@@ -37,6 +37,10 @@ namespace System
         {
             public TKey Key;
             public int Count;
+            public override string ToString()
+            {
+                return Key.ToString() + ": " + Count;
+            }
         }
 
         public static IQueryable<CountByResult<TKey>> CountBy<TData, TKey>(this IQueryable<TData> data, Expression<Func<TData, TKey>> key)
