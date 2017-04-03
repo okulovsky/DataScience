@@ -19,6 +19,21 @@ namespace System
 
     public static class IEnumerableExtensions
     {
+
+        public static IEnumerable<T> WithCounts<T>(this IEnumerable<T> en, int st=100)
+        {
+            int cnt = 0;
+            foreach (var e in en)
+            {
+                yield return e;
+                if (cnt % st == 0)
+                    Console.Write(cnt + "               \r");
+                cnt++;
+            }
+            Console.WriteLine();
+        }
+
+
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> en)
         {
             var set = new HashSet<T>();
