@@ -1,4 +1,5 @@
-﻿using DataScience.Tables;
+﻿using DataScience.QuickAnalysis;
+using DataScience.Tables;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataScience.QuickAnalysis
+namespace DataScience
 {
     public static class Printing1
     {
@@ -16,6 +17,8 @@ namespace DataScience.QuickAnalysis
         static Dictionary<string,object> FlattenObject(object e)
         {
             var type = e.GetType();
+            if (type.IsPrintable())
+                return new Dictionary<string, object> { ["Value"] = e };
             if (!accessors.ContainsKey(type))
                 accessors[type] = type.GetHierarchicalAccessors().ToList();
             return accessors[type].ToDictionary(z => z.Name, z => z.GetValue(e));
@@ -79,8 +82,9 @@ namespace DataScience.QuickAnalysis
             }
         }
 
-        public static string Print(object data)
+        public static string Print(this object data)
         {
+
             var table = new Table<int, string, string>();
             var indexer = table.Indexer(z => z.AutoCreate(), z => z.AutoCreate());
             foreach (var row in Flatten(data).WithIndices())
@@ -90,12 +94,12 @@ namespace DataScience.QuickAnalysis
             var lengths = table
                 .Columns
                 .WithIndices()
-                .Select(z => 
+                .Select(z =>
                  new
                  {
-                     columnIndex=z.Index,
-                     columnName=z.Item,
-                     max=table.GetColumnData(z.Item).Max(x => x.Value.Length)
+                     columnIndex = z.Index,
+                     columnName = z.Item,
+                     max = Math.Max(table.GetColumnData(z.Item).Max(x => x.Value.Length),z.Item.Length)
                  })
                 .ToList();
 
@@ -104,11 +108,13 @@ namespace DataScience.QuickAnalysis
                 .Aggregate((a, b) => a + b);
 
             var builder = new StringBuilder();
-            builder.AppendLine(string.Format(formats, lengths.Select(z=>z.columnName).ToList()));
+            builder.AppendLine(string.Format(formats, lengths.Select(z=>z.columnName).ToArray()));
             builder.AppendLine(string.Format(formats, lengths.Select(z => new string('-', z.max)).ToArray()));
             foreach (var e in table.Rows)
                 builder.AppendLine(string.Format(formats, lengths.Select(z=>table.GetValue(e,z.columnName)).ToArray()));
-            return builder.ToString();
+            var result = builder.ToString();
+            Console.WriteLine(result);
+            return result;
         }
     }
 }

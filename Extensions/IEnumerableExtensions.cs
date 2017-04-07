@@ -1,6 +1,7 @@
 ﻿using DataScience;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -19,6 +20,14 @@ namespace System
 
     public static class IEnumerableExtensions
     {
+        public static Pair<T> AsPair<T>(this IEnumerable<T> data)
+        {
+            var list = data.ToList();
+            if (list.Count != 2)
+                throw new ArgumentException();
+            return new Pair<T>(list[0], list[1]);
+        }
+
 
         public static IEnumerable<T> WithCounts<T>(this IEnumerable<T> en, int st=100)
         {
@@ -31,6 +40,42 @@ namespace System
                 cnt++;
             }
             Console.WriteLine();
+        }
+
+        public static void ToConsole<T>(this IEnumerable<T> en)
+        {
+            en.Cast<object>().ForEach(Console.WriteLine);
+        }
+
+        public static void ToFile<T>(this IEnumerable<T> en, string filename)
+        {
+            using (var file = new StreamWriter(filename))
+                foreach (var e in en)
+                    file.WriteLine(e.ToString());
+        }
+
+        public class AddSelectResult<T1,T2>
+        {
+            public readonly T1 Original;
+            public readonly T2 Addition;
+            public AddSelectResult(T1 original, T2 addition)
+            {
+                Original = original;
+                Addition = addition;
+            }
+        }
+
+        public static IEnumerable<AddSelectResult<T1,T2>> AddSelect<T1,T2>(this IEnumerable<T1> en, Func<T1,T2> selector)
+        {
+            foreach (var e in en)
+                yield return new AddSelectResult<T1, T2>(e, selector(e));
+        }
+
+        public static IEnumerable<T1> WhereAdded<T1,T2>(this IEnumerable<AddSelectResult<T1,T2>> en, Func<T2,bool> filter)
+        {
+            foreach (var e in en)
+                if (filter(e.Addition))
+                    yield return e.Original;
         }
 
 

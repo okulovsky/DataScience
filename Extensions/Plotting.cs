@@ -28,27 +28,35 @@ namespace DataScience
             return s;
         }
 
-        public static Series MakeHistogram<T>(this IEnumerable<T> data, Func<T, double> selector, double min, double max, int count=-1)
+        
+
+        public static IEnumerable<KeyValuePair<double,double>> MakeHistogram<T>(this IEnumerable<T> _data, Func<T,double> selector, int bins=50)
         {
-            if (count == -1) count = (int)Math.Round(max - min);
-            var values = new int[count];
-            var sum = 0;
+            var data = _data.Select(selector).ToList();
+            var min = data.Min();
+            var max = data.Max();
+            var bin = (max - min) / bins;
+            var counts = new int[bins];
             foreach (var e in data)
             {
-                var value = selector(e);
-                int index = (int)(count*(value - min) / (max - min));
+                var index = (int)(bins * (e - min) / (max - min));
                 if (index < 0) index = 0;
-                if (index >= count) index = count - 1;
-                values[index]++;
-                sum++;
+                if (index >= bins) index = bins-1;
+                counts[index]++;
             }
-            var serie = new Series();
-            for (int i = 0; i < values.Length; i++)
-                serie.Points.Add(new DataPoint(min + i * (max - min) / count, (double)values[i] / count));
-            serie.WithType(SeriesChartType.Column);
-            return serie;
+
+
+
+            var result = new Series();
+            for (int i = 0; i < bins; i++)
+            {
+                yield return new KeyValuePair<double, double>(
+                    min + i * (max - min) / bins, 
+                    (double)counts[i] / data.Count);
+            }
         }
 
+     
         public static Series Fill<T>(this Series s, IEnumerable<T> en, Func<T, double> ySelector)
         {
             int x = 0;
