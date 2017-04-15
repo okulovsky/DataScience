@@ -62,6 +62,7 @@
     <Compile Include="Averager.cs" />
     <Compile Include="DataAccess\IDbConnectionExtensions.cs" />
     <Compile Include="Dictionary.cs" />
+    <Compile Include="Extensions\Normalization.cs" />
     <Compile Include="Extensions\Pair.cs" />
     <Compile Include="Files.cs" />
     <Compile Include="GeneticAlgorithms\ArrayGene\ArrayChromosome.cs" />

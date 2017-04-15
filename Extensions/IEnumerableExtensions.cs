@@ -20,6 +20,11 @@ namespace System
 
     public static class IEnumerableExtensions
     {
+        public static string Join(this IEnumerable<string> strings, string separator)
+        {
+            return string.Join(separator, strings);
+        }
+
         public static Pair<T> AsPair<T>(this IEnumerable<T> data)
         {
             var list = data.ToList();
@@ -265,6 +270,7 @@ namespace System
             }
         }
 
+        
         public static T MaxOrDefault<T>(this IEnumerable<T> en)
             where T : IComparable
         {

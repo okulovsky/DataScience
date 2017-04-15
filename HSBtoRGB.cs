@@ -7,6 +7,47 @@ using System.Threading.Tasks;
 
 namespace DataScience
 {
+    public static class Colors
+    {
+        public static string ToHtml(this Color c)
+        {
+            return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
+        }
+
+        public static IEnumerable<Color> Grayscale(int steps, double from=0, double to=1 )
+        {
+            var delta = (to-from) / (steps - 1);
+
+            for (int i=0;i<steps;i++)
+            {
+                var k = (int)(from + steps * i);
+                yield return Color.FromArgb(k, k, k);
+            }
+        }
+
+     
+
+        public static IEnumerable<Color> Gradient(int steps, Color from, Color to)
+        {
+            var deltaR = (double)(to.R - from.R) / (steps-1);
+            var deltaG = (double)(to.G - from.G) / (steps - 1);
+            var deltaB = (double)(to.B - from.B) / (steps - 1);
+            for (int i = 0; i < steps; i++)
+                yield return Color.FromArgb(
+                    (int)(from.R + deltaR * i),
+                    (int)(from.G + deltaG * i),
+                    (int)(from.B + deltaB * i));
+        }
+
+        public static IEnumerable<Color> Rainbow(int steps, double s=0.5, double l=0.5)
+        {
+            var delta = 360.0 / steps;
+            for (int i = 0; i < steps; i++)
+                yield return HSB.ToColor(i * delta, s, l);
+        }
+    }
+
+
     public static class HSB
     {
 
