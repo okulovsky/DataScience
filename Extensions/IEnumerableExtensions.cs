@@ -44,6 +44,7 @@ namespace System
                     Console.Write(cnt + "               \r");
                 cnt++;
             }
+            Console.Write(cnt);
             Console.WriteLine();
         }
 

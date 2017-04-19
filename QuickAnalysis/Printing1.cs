@@ -31,10 +31,20 @@ namespace DataScience
 
         public static IEnumerable<Dictionary<string, object>> Flatten(object data)
         {
-            if (data is IEnumerable)
+            if (data.GetType().IsPrintable())
+            {
+                yield return new Dictionary<string, object> { ["Value"] = data };
+            }
+            else if (data is IEnumerable)
             {
                 foreach (var e in ((IEnumerable)data))
                 {
+                    if (e.GetType().IsPrintable())
+                    {
+                        yield return FlattenObject(e);
+                        continue;
+                    }
+
                     if (e is IDictionary)
                     {
                        
@@ -54,10 +64,6 @@ namespace DataScience
 
                     yield return FlattenObject(e);
                 }
-            }
-            else if (data.GetType().IsPrintable())
-            {
-                yield return new Dictionary<string, object> { ["Value"] = data };
             }
             else
             {
@@ -99,7 +105,7 @@ namespace DataScience
                  {
                      columnIndex = z.Index,
                      columnName = z.Item,
-                     max = Math.Max(table.GetColumnData(z.Item).Max(x => x.Value.Length),z.Item.Length)
+                     max = Math.Max(table.GetColumnData(z.Item).Max(x => x.Value?.Length??0),z.Item.Length)
                  })
                 .ToList();
 
