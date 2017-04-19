@@ -20,6 +20,26 @@ namespace System
 
     public static class IEnumerableExtensions
     {
+        public static IEnumerable<T> AggregateAdd<T>(this IEnumerable<T> data, Func<T,T,T> aggregator)
+        {
+            var accumulator = default(T);
+            var firstTime = true;
+            foreach(var e in data)
+            {
+                if (firstTime)
+                {
+                    accumulator = e;
+                    firstTime = false;
+                }
+                else
+                {
+                    accumulator = aggregator(accumulator, e);
+                }
+                yield return accumulator;
+            }
+        }
+
+
         public static string Join(this IEnumerable<string> strings, string separator)
         {
             return string.Join(separator, strings);
@@ -167,6 +187,7 @@ namespace System
             }
         }
 
+        [Obsolete]
         public static IEnumerable<Tuple<T, T>> Pairs<T>(this IEnumerable<T> data)
         {
             var previous = default(T);
@@ -207,6 +228,12 @@ namespace System
             foreach (var e in data)
                 hist.AddValue(header, (int)(e / precision), 1);
             return hist;
+        }
+
+        public static TData ArgMaxOrDefault<TData, TCompare>(this IEnumerable<TData> data, Func<TData, TCompare> selector)
+            where TCompare : IComparable
+        {
+            return data.ArgMax(selector, true);
         }
 
         public static TData ArgMax<TData,TCompare>(this IEnumerable<TData> data, Func<TData, TCompare> selector, bool OrDefault=false)
