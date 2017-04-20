@@ -18,6 +18,8 @@ namespace DataScience.Tables
         public readonly TableDimension<TColumn> Columns = new TableDimension<TColumn>("Columns");
         Dictionary<TRow, Dictionary<TColumn, TValue>> data = new Dictionary<TRow, Dictionary<TColumn, TValue>>();
 
+        public int[] Shape { get { return new[] { Rows.Count(), Columns.Count() }; } }
+
         public TValue GetValue(TRow row, TColumn column)
         {
             if (!Rows.Contains(row)) throw new ArgumentException();

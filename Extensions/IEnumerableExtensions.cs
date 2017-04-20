@@ -1,5 +1,7 @@
 ﻿using DataScience;
+using DataScience.QuickAnalysis;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -53,6 +55,11 @@ namespace System
             return new Pair<T>(list[0], list[1]);
         }
 
+        public static IEnumerable<T> Prepend<T>(this IEnumerable<T> en, params T[] data)
+        {
+            return data.Concat(en);
+        }
+
 
         public static IEnumerable<T> WithCounts<T>(this IEnumerable<T> en, int st=100)
         {
@@ -64,13 +71,26 @@ namespace System
                     Console.Write(cnt + "               \r");
                 cnt++;
             }
-            Console.Write(cnt);
             Console.WriteLine();
         }
 
-        public static void ToConsole<T>(this IEnumerable<T> en)
+        public static string ToConsole(this object obj)
         {
-            en.Cast<object>().ForEach(Console.WriteLine);
+            string result = null;
+            if (obj == null)
+                result = "NULL";
+            else if (obj.GetType().IsPrintable())
+                result = obj.ToString();
+            else if (obj is IEnumerable)
+            {
+                result = "";
+                foreach (object c in obj as IEnumerable)
+                    result += c.ToString() + "\n";
+            }
+            if (result==null)
+                throw new Exception("Cannot output to console. Use Print instead");
+            Console.WriteLine(result);
+            return result;
         }
 
         public static void ToFile<T>(this IEnumerable<T> en, string filename)

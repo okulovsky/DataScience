@@ -109,6 +109,12 @@ namespace DataScience
                  })
                 .ToList();
 
+            if (lengths.Count == 0)
+            {
+                Console.WriteLine("EMPTY");
+                return "EMPTY";
+            }
+
             var formats = lengths
                 .Select(coldata => "{" + coldata.columnIndex + ",-" + (coldata.max + 2) + "}")
                 .Aggregate((a, b) => a + b);
