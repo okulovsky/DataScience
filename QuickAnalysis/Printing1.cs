@@ -74,14 +74,19 @@ namespace DataScience
         public static IEnumerable<string> ToCsvStrings<T>(this IEnumerable<T> data)
         {
             bool firstTime = true;
+            string[] keyOrder = null;
             foreach(var e in Flatten(data))
             {
-                if (firstTime) yield return string.Join(",", e.Keys);
-                firstTime = true;
-                yield return string.Join(",", e.Values.Select(z =>
+                if (firstTime)
+                {
+                    keyOrder = e.Keys.ToArray();
+                    yield return string.Join(",", e.Keys);
+                }
+                firstTime = false;
+                yield return string.Join(",", keyOrder.Select(z=>e[z]).Select(z =>
                 {
                     if (z == null) return "NA";
-                    else if (Types.NullableTypes.Contains(z.GetType()))
+                    else if (!Types.NullableTypes.Contains(z.GetType()))
                         return z.ToString();
                     else return $"\"{z.ToString()}\"";
                 }));

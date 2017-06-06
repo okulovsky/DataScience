@@ -44,5 +44,13 @@ namespace DataScience
         }
     }
 
+    public class Csv
+    {
+        public static void Write<T>(string filename, IEnumerable<T> data)
+        {
+            File.WriteAllLines(filename, Printing1.ToCsvStrings(data));
+        }
+    }
+
     
 }

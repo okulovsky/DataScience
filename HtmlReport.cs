@@ -11,21 +11,103 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace DataScience
 {
-    public class HtmlReport : IDisposable
+    public class HtmlReportBase
     {
         public readonly StringBuilder body = new StringBuilder();
-        public readonly string filename;
 
-        public readonly StringBuilder contents = new StringBuilder();
-
-        public HtmlReport(string filename)
+        public void TD(object v)
         {
-            this.filename = filename;
+            Write($"<td>{v?.ToString() ?? ""}</td>");
         }
 
-        public void View()
+        public void AddChart(Chart chart, Size size)
         {
-            Process.Start(filename);
+            chart.Size = size;
+            chart.SaveImage("temp.png", ChartImageFormat.Png);
+            var bytes = File.ReadAllBytes("temp.png");
+            AddImage(bytes, "png");
+        }
+
+        public void AddTable<TRow, TColumn, TValue>(Table<TRow, TColumn, TValue> table, Func<TRow, string> rowWriter, Func<TColumn, string> columnWriter, Func<TValue, string> valueWriter)
+        {
+            body.AppendLine("<table><tr><th></th>");
+            foreach (var e in table.Columns)
+                body.AppendLine($"<th>{columnWriter(e)}</th>");
+            body.AppendLine("</tr>");
+            foreach (var e in table.Rows)
+            {
+                body.AppendLine($"<tr><th>{rowWriter(e)}</th>");
+                foreach (var c in table.Columns)
+                    body.AppendLine($"<td>{valueWriter(table.GetValue(e, c))}</td>");
+                body.AppendLine("</tr>");
+            }
+            body.AppendLine("</table>");
+
+        }
+
+        public void Par(string s)
+        {
+            body.AppendLine("<p>" + s + "</p>");
+        }
+
+        public void H1(string s)
+        {
+            body.AppendLine("<h1>" + s + "</h1>");
+        }
+
+        public void H2(string s)
+        {
+            body.AppendLine("<h2>" + s + "</h2>");
+        }
+
+        public void Write(string v)
+        {
+            body.AppendLine(v);
+        }
+
+        public void H3(string s)
+        {
+            body.AppendLine("<h3>" + s + "</h3>");
+        }
+
+        public void AddImage(byte[] image, string type)
+        {
+            body.AppendLine($"<img src=\"data:image/{type};base64,{Convert.ToBase64String(image)}\"/>");
+        }
+
+        public string AnchorHere()
+        {
+            var guid = Guid.NewGuid();
+            body.AppendLine($"<div id=\"" + guid + "\"></div>");
+            return guid.ToString();
+        }
+
+        public void Link(string id, string text)
+        {
+            body.AppendLine("<a href=#" + id + ">" + text + "</a>");
+        }
+    }
+
+
+
+    public class HtmlReport : HtmlReportBase, IDisposable
+    {
+        public readonly string filename;
+        public readonly bool skipStyles;
+        public Dictionary<string, HtmlReportBase> Sections;
+        public List<string> SectionsOrder;
+
+
+        public HtmlReport(string filename, bool skipStyles= false, string[] sections=null)
+        {
+            this.filename = filename;
+            this.skipStyles = skipStyles;
+            if (sections == null)
+                sections = new[] { "main" };
+            SectionsOrder = sections.ToList();
+            if (!SectionsOrder.Contains("main"))
+                SectionsOrder.Add("main");
+            Sections = SectionsOrder.ToDictionary(z => z, z => z == "main" ? this : new HtmlReportBase());
         }
 
         public void Dispose()
@@ -36,7 +118,7 @@ namespace DataScience
 <html xmlns=""http://www.w3.org/1999/xhtml"">
 <head>");
 
-            if (!SkipStyles)
+            if (!skipStyles)
             writer.WriteLine(@"
 <style type=""text/css"">
 h1 {
@@ -87,81 +169,16 @@ tr:nth-child(odd) td { background: #FEFEFE; }
 </style>
 </head>
 <body>");
-            writer.WriteLine(contents);
-            writer.WriteLine(body);
+            foreach (var e in SectionsOrder)
+                writer.WriteLine(Sections[e].body);
             writer.WriteLine("</body></html>");
             writer.Close();
+            Process.Start(filename);
         }
 
-        public void AddImage(byte[] image, string type)
-        {
-            body.AppendLine($"<img src=\"data:image/{type};base64,{Convert.ToBase64String(image)}\"/>");
-        }
 
-        int linkCounter = 0;
 
-        public bool SkipStyles { get; set; }
 
-        public void Link(string header)
-        {
-            contents.AppendLine($"<a href=\"#c{linkCounter}\">{header}</a><br>");
-            body.AppendLine($"<p id=\"c{linkCounter}\"></p>");
-            linkCounter++;
-        }
 
-        public void TD(object v)
-        {
-            Write($"<td>{v?.ToString()??""}</td>");
-        }
-
-        public void AddChart(Chart chart, Size size)
-        {
-            chart.Size = size;
-            chart.SaveImage("temp.png", ChartImageFormat.Png);
-            var bytes = File.ReadAllBytes("temp.png");
-            AddImage(bytes, "png");
-        }
-
-        public void AddTable<TRow,TColumn,TValue>(Table<TRow, TColumn, TValue> table, Func<TRow,string> rowWriter, Func<TColumn,string> columnWriter, Func<TValue,string> valueWriter)
-        {
-            body.AppendLine("<table><tr><th></th>");
-            foreach (var e in table.Columns)
-                body.AppendLine($"<th>{columnWriter(e)}</th>");
-            body.AppendLine("</tr>");
-            foreach (var e in table.Rows)
-            {
-                body.AppendLine($"<tr><th>{rowWriter(e)}</th>");
-                foreach (var c in table.Columns)
-                    body.AppendLine($"<td>{valueWriter(table.GetValue(e, c))}</td>");
-                body.AppendLine("</tr>");
-            }
-            body.AppendLine("</table>");
-
-        }
-
-        public void Par(string s)
-        {
-            body.AppendLine("<p>" + s + "</p>");
-        }
-
-        public void H1(string s)
-        {
-            body.AppendLine("<h1>" + s + "</h1>");
-        }
-
-        public void H2(string s)
-        {
-            body.AppendLine("<h2>" + s + "</h2>");
-        }
-
-        public void Write(string v)
-        {
-            body.AppendLine(v);
-        }
-
-        public void H3(string s)
-        {
-            body.AppendLine("<h3>" + s + "</h3>");
-        }
     }
 }
