@@ -38,7 +38,9 @@ namespace DataScience
 
         public static void Write(string filename, object t)
         {
-            using (var file = File.Open(filename, FileMode.OpenOrCreate, FileAccess.Write))
+            if (File.Exists(filename))
+                File.Delete(filename);
+            using (var file = new FileStream(filename, FileMode.Create, FileAccess.Write))
                 new BinaryFormatter().Serialize(file, t);
 
         }

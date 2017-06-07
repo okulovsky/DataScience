@@ -12,7 +12,7 @@ namespace DataScience
     {
         class A
         {
-            public int Q;
+            public int Q = 0;
             public string W { get; set; }
         }
 

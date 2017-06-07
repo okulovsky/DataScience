@@ -95,7 +95,7 @@ namespace System
 
         public static void ToFile<T>(this IEnumerable<T> en, string filename)
         {
-            using (var file = new StreamWriter(filename))
+            using (var file = new StreamWriter(filename,false, Encoding.UTF8))
                 foreach (var e in en)
                     file.WriteLine(e.ToString());
         }
