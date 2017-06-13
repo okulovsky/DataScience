@@ -57,11 +57,13 @@ namespace DataScience.Tables
             return Transliterator.Transliterate(s.ToString());
         }
 
+
         public static Table<TRow, TColumn, TValue> ReadCsv<TRow, TColumn, TValue>(
             string filename,
             Func<string, TRow> rowParser,
             Func<string, TColumn> columnParser,
-            Func<string, TValue> valueParser)
+            Func<string, TValue> valueParser,
+            bool noRowIndex=false)
         {
             bool firstRow = true;
             var result = new Table<TRow, TColumn, TValue>();
@@ -70,24 +72,41 @@ namespace DataScience.Tables
                 result.Rows.Indexing.OnlyExisted(), 
                 result.Columns.Indexing.Int());
 
+            int rowNum = -2;
+
             using (var reader = new StreamReader(filename))
                 while (true)
                 {
                     var e = reader.ReadLine();
                     if (e == null) break;
+                    rowNum++;
 
                     var values = e.Split(',').Select(Unquote).ToList();
                     if (firstRow)
                     {
-                        foreach (var c in values.Skip(1))
+                        foreach (var c in values.Skip(noRowIndex?0:1))
                             result.Columns.Add(columnParser(c));
                         firstRow = false;
                         continue;
                     }
-                    var rowName = rowParser(values[0]);
+
+                    int valuesBegins = 0;
+                    var rowName = default(TRow);
+
+                    if (noRowIndex)
+                    {
+                        rowName = rowParser(rowNum.ToString());
+                        valuesBegins = 0;
+                    }
+                    else
+                    {
+                        rowName = rowParser(values[0]);
+                        valuesBegins = 1;
+                    }
+
                     result.Rows.Add(rowName);
-                    for (int i = 0; i < values.Count - 1; i++)
-                        indexer[rowName, i] = valueParser(values[i + 1]);
+                    for (int i = valuesBegins; i < values.Count; i++)
+                        indexer[rowName, i-valuesBegins] = valueParser(values[i]);
                 }
             return result;
         }

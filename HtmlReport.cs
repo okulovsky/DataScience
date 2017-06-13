@@ -94,14 +94,16 @@ namespace DataScience
     {
         public readonly string filename;
         public readonly bool skipStyles;
+        public readonly bool dontOpen;
         public Dictionary<string, HtmlReportBase> Sections;
         public List<string> SectionsOrder;
 
 
-        public HtmlReport(string filename, bool skipStyles= false, string[] sections=null)
+        public HtmlReport(string filename, bool skipStyles= false, string[] sections=null, bool dontOpen=false)
         {
             this.filename = filename;
             this.skipStyles = skipStyles;
+            this.dontOpen = dontOpen;
             if (sections == null)
                 sections = new[] { "main" };
             SectionsOrder = sections.ToList();
@@ -173,7 +175,8 @@ tr:nth-child(odd) td { background: #FEFEFE; }
                 writer.WriteLine(Sections[e].body);
             writer.WriteLine("</body></html>");
             writer.Close();
-            Process.Start(filename);
+            if (!dontOpen)
+                Process.Start(filename);
         }
 
 
