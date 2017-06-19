@@ -74,6 +74,18 @@ namespace System
             Console.WriteLine();
         }
 
+        public static IEnumerable<T> WithReporting<T>(this IEnumerable<T> en, Func<T,string> reportMaker, int st=1)
+        {
+            int cnt = 0;
+            foreach (var e in en)
+            {
+                yield return e;
+                if (cnt % st == 0)
+                    Console.WriteLine(reportMaker(e));
+                cnt++;
+            }
+        }
+
         public static string ToConsole(this object obj)
         {
             string result = null;
