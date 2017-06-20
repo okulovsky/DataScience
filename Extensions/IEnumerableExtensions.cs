@@ -86,6 +86,16 @@ namespace System
             }
         }
 
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> en, Action<T> action)
+        {
+            foreach (var e in en)
+            {
+                action(e);
+                yield return e;
+            }
+        }
+
+
         public static string ToConsole(this object obj)
         {
             string result = null;
@@ -145,11 +155,6 @@ namespace System
             return set;
         }
 
-        public static void ForEach<T>(this IEnumerable<T> en, Action<T> action)
-        {
-            foreach (var e in en)
-                action(e);
-        }
 
         public class CountByResult<TKey>
         {
