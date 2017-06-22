@@ -1,4 +1,4 @@
-﻿using DataScience.QuickAnalysis;
+﻿using DataScience;
 using DataScience.Tables;
 using System;
 using System.Collections;

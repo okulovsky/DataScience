@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataScience.QuickAnalysis
+namespace DataScience
 {
     [TestFixture]
     class Printing1_should

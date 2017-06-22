@@ -1,5 +1,5 @@
 ﻿using DataScience;
-using DataScience.QuickAnalysis;
+using DataScience;
 using System;
 using System.Collections;
 using System.Collections.Generic;

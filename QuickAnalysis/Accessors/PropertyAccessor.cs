@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataScience.QuickAnalysis
+namespace DataScience
 {
     public class PropertyAccessor : IAccessor
     {
