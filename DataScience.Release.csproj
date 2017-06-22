@@ -79,6 +79,9 @@
     <Compile Include="Histogram.cs" />
     <Compile Include="HSBtoRGB.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="QuickAnalysis\Accessors\Accessor.cs" />
+    <Compile Include="QuickAnalysis\Accessors\DictionaryAccessor.cs" />
+    <Compile Include="QuickAnalysis\CSVWriter.cs" />
     <Compile Include="QuickAnalysis\Printing1.cs" />
     <Compile Include="QuickAnalysis\Printing1_should.cs" />
     <Compile Include="Regression\GUI\AlgorithmProgram1.cs" />

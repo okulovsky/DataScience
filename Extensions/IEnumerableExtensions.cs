@@ -19,6 +19,12 @@ namespace System
         public double Std;
     }
 
+    public class ItemWithIndex<T>
+    {
+        public T Item;
+        public int Index;
+    }
+
 
     public static class IEnumerableExtensions
     {
@@ -199,11 +205,7 @@ namespace System
 
 
 
-        public class ItemWithIndex<T>
-        {
-            public T Item;
-            public int Index;
-        }
+
 
 
         public static IEnumerable<ItemWithIndex<T>> WithIndices<T>(this IEnumerable<T> en)
