@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataScience
 {
-    public class CSVWriter<T>
+    public static class StringTransform
     {
-        List<IAccessor> accessors;
-        TextWriter writer;
-
-
-        string ConvertLetter(ItemWithIndex<string> s)
+        static string ConvertLetter(ItemWithIndex<string> s)
         {
             if (s.Item == ".") return "_";
             if (s.Item.ToLower() == s.Item) return s.Item;
@@ -21,7 +17,7 @@ namespace DataScience
             return s.Item.ToLower();
         }
 
-        string ConvertCamelCase(string s)
+        public static string ConvertCamelCase(string s)
         {
             return s
                 .Select(x => x.ToString())
@@ -29,13 +25,23 @@ namespace DataScience
                 .Select(x => ConvertLetter(x))
                 .Join("");
         }
+    }
+
+
+    public class CSVWriter<T>
+    {
+        List<IAccessor> accessors;
+        TextWriter writer;
+
+
+
 
         public CSVWriter(List<IAccessor> accessors, TextWriter writer)
         {
             this.accessors = accessors;
             this.writer = writer;
             var header =
-                accessors.Select(x => ConvertCamelCase(x.Name))
+                accessors.Select(x => StringTransform.ConvertCamelCase(x.Name))
                 .Join(",");
             header = header.Replace("__", "_");
             writer.WriteLine(header);
